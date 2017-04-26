@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Environment size
 width = 5
 height = 16
-epochs = 100
+epochs = 10000
 
 # Actions
 num_actions = 4
@@ -101,8 +101,12 @@ def getNextAction(state, n):
             return greedy(state)
     return random.choice(getActions(state))
 
-for n in ("greedy","e-greedy","random"):
+resultados=[]
+labels=[]
+for n in ("random", "greedy", "e-greedy"):
+    labels.append(n)
     Q = np.zeros((height * width, num_actions))
+    actions = 0
     for i in xrange(epochs):
         state = getRndState()
         while state != final_state:
@@ -117,32 +121,38 @@ for n in ("greedy","e-greedy","random"):
             state = new_state
     # print Q
     print "Numero promedio de acciones en ", n, " -> ", actions/epochs
+    resultados.append(actions/epochs)
+
+
+plt.bar([1, 2, 3], resultados, align="center")
+plt.xticks([1, 2, 3], labels)
+plt.show()
 
 # Q matrix plot
 
-s = 0
-ax = plt.axes()
-ax.axis([-1, width + 1, -1, height + 1])
-
-for j in xrange(height):
-
-    plt.plot([0, width], [j, j], 'b')
-    for i in xrange(width):
-        plt.plot([i, i], [0, height], 'b')
-
-        direction = np.argmax(Q[s])
-        if s != final_state:
-            if direction == 0:
-                ax.arrow(i + 0.5, 0.75 + j, 0, -0.35, head_width=0.08, head_length=0.08, fc='k', ec='k')
-            if direction == 1:
-                ax.arrow(0.25 + i, j + 0.5, 0.35, 0., head_width=0.08, head_length=0.08, fc='k', ec='k')
-            if direction == 2:
-                ax.arrow(i + 0.5, 0.25 + j, 0, 0.35, head_width=0.08, head_length=0.08, fc='k', ec='k')
-            if direction == 3:
-                ax.arrow(0.75 + i, j + 0.5, -0.35, 0., head_width=0.08, head_length=0.08, fc='k', ec='k')
-        s += 1
-
-    plt.plot([i+1, i+1], [0, height], 'b')
-    plt.plot([0, width], [j+1, j+1], 'b')
-
-plt.show()
+# s = 0
+# ax = plt.axes()
+# ax.axis([-1, width + 1, -1, height + 1])
+#
+# for j in xrange(height):
+#
+#     plt.plot([0, width], [j, j], 'b')
+#     for i in xrange(width):
+#         plt.plot([i, i], [0, height], 'b')
+#
+#         direction = np.argmax(Q[s])
+#         if s != final_state:
+#             if direction == 0:
+#                 ax.arrow(i + 0.5, 0.75 + j, 0, -0.35, head_width=0.08, head_length=0.08, fc='k', ec='k')
+#             if direction == 1:
+#                 ax.arrow(0.25 + i, j + 0.5, 0.35, 0., head_width=0.08, head_length=0.08, fc='k', ec='k')
+#             if direction == 2:
+#                 ax.arrow(i + 0.5, 0.25 + j, 0, 0.35, head_width=0.08, head_length=0.08, fc='k', ec='k')
+#             if direction == 3:
+#                 ax.arrow(0.75 + i, j + 0.5, -0.35, 0., head_width=0.08, head_length=0.08, fc='k', ec='k')
+#         s += 1
+#
+#     plt.plot([i+1, i+1], [0, height], 'b')
+#     plt.plot([0, width], [j+1, j+1], 'b')
+#
+# plt.show()
