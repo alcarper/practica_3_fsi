@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Environment size
 width = 5
 height = 16
-epochs = 10000
+epochs = 1000
 
 # Actions
 num_actions = 4
@@ -86,25 +86,26 @@ def greedy(state):
     if max(Q[state]) != 0:
         return max_action
     else:
-        return random.choice(getActions(state))
+        return getRndAction(state)
 
 actions = 0
 # Episodes
-def getNextAction(state, n):
-    if n == "greedy":
+def getNextAction(state, policy):
+    policy = policy.split(" ")
+    if policy[0] == "greedy":
         return greedy(state)
-    elif n == "e-greedy":
+    elif policy[0] == "e-greedy":
         prob = random.random()
-        if prob < 0.2:
-            return random.choice(getActions(state))
+        if prob > policy[1]:
+            return getRndAction(state)
         else:
             return greedy(state)
-    return random.choice(getActions(state))
+    return getRndAction(state)
 
 resultados=[]
-labels=[]
-for n in ("random", "greedy", "e-greedy"):
-    labels.append(n)
+policies = ("random", "greedy", "e-greedy 0.8", "e-greedy 0.5", "e-greedy 0.7") # prob=1 --> greedy
+
+for n in policies:
     Q = np.zeros((height * width, num_actions))
     actions = 0
     for i in xrange(epochs):
@@ -123,9 +124,12 @@ for n in ("random", "greedy", "e-greedy"):
     print "Numero promedio de acciones en ", n, " -> ", actions/epochs
     resultados.append(actions/epochs)
 
+number_of_policies = []
+for v in range(len(policies)):
+    number_of_policies.append(v)
 
-plt.bar([1, 2, 3], resultados, align="center")
-plt.xticks([1, 2, 3], labels)
+plt.bar(number_of_policies, resultados, align="center")
+plt.xticks(number_of_policies, policies)
 plt.show()
 
 # Q matrix plot
