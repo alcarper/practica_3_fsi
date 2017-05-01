@@ -96,13 +96,13 @@ def getNextAction(state, policy):
         return greedy(state)
     elif policy[0] == "e-greedy":
         prob = random.random()
-        if prob > policy[1]:
+        if prob > float(policy[1]):
             return getRndAction(state)
         else:
             return greedy(state)
     return getRndAction(state)
 
-resultados=[]
+results = []
 policies = ("random", "greedy", "e-greedy 0.8", "e-greedy 0.5", "e-greedy 0.7") # prob=1 --> greedy
 
 for n in policies:
@@ -111,9 +111,7 @@ for n in policies:
     for i in xrange(epochs):
         state = getRndState()
         while state != final_state:
-            # action = getRndAction(state)
             action = getNextAction(state, n)
-            # print action
             y = getStateCoord(state)[0] + actions_vectors[action][0]
             x = getStateCoord(state)[1] + actions_vectors[action][1]
             new_state = getState(y, x)
@@ -122,13 +120,13 @@ for n in policies:
             state = new_state
     # print Q
     print "Numero promedio de acciones en ", n, " -> ", actions/epochs
-    resultados.append(actions/epochs)
+    results.append(actions / epochs)
 
 number_of_policies = []
 for v in range(len(policies)):
     number_of_policies.append(v)
 
-plt.bar(number_of_policies, resultados, align="center")
+plt.bar(number_of_policies, results, align="center")
 plt.xticks(number_of_policies, policies)
 plt.show()
 
