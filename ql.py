@@ -103,11 +103,13 @@ def getNextAction(state, policy):
     return getRndAction(state)
 
 results = []
-policies = ("random", "greedy", "e-greedy 0.8", "e-greedy 0.5", "e-greedy 0.7") # prob=1 --> greedy
+policies = ("random", "greedy", "e-greedy 0.95", "e-greedy 0.90", "e-greedy 0.80",
+            "e-greedy 0.70", "e-greedy 0.50", "e-greedy 0.30")  # prob=1 --> greedy
 
 for n in policies:
     Q = np.zeros((height * width, num_actions))
     actions = 0
+
     for i in xrange(epochs):
         state = getRndState()
         while state != final_state:
